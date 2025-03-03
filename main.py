@@ -1,3 +1,5 @@
+from typing import Any
+
 MENU = {
     "espresso": {
         "ingredients": {
@@ -29,6 +31,14 @@ resources = {
     "milk": 200,
     "coffee": 100,
 }
+profit = 0.0
+price = {
+"latte" : 2.50,
+"espresso" : 3.50,
+"cappuccino" : 3.60
+}
+
+
 is_machine_stop = False
 user_choice = input(" What would you like? (espresso/latte/cappuccino): ").lower()
 
@@ -51,7 +61,22 @@ if user_choice == "off":
 
 #TODO:2 check resources sufficient
 
-# def resources_left():
+
+latte = {
+        "water": 100,
+        "milk": 55,
+        "coffee": 30
+    }
+expresso = {
+        "water": 0,
+        "milk": 10,
+        "coffee": 25
+    }
+cappuccino = {
+        "water": 200,
+        "milk": 10,
+        "coffee": 35
+    }
 
 
 def is_resource_sufficient(drink):
@@ -75,8 +100,12 @@ def is_resource_sufficient(drink):
         return False
 
 
-result = is_resource_sufficient("latte")
-print(result)
+result = is_resource_sufficient(user_choice)
+if not result:
+    print("There is not Enough resources")
+else:
+    print("Enough resources for drink")
+
 
 # TODO:3 process the coins
 def calculate_monetary_value(quarters, dimes, nickles, pennies):
@@ -89,12 +118,66 @@ def calculate_monetary_value(quarters, dimes, nickles, pennies):
     return total_value
 
 
-calculate_monetary_value(quarters=1, dimes=2, nickles=1, pennies=2)
+total_money: float | Any = calculate_monetary_value(quarters=4, dimes=5, nickles=34, pennies=2)
 
 
+# TODO:4 Check Transaction SuccessFul
 
 
-#TODO:4 Check Transaction SuccessFul
+def is_transaction_successful(total_value, selected_drink):
+    if selected_drink == "latte":
+        if total_value >= 2.50:
+            if total_value > 2.50:
+                remaining = total_value - 2.50
+                print(f"Here your change {remaining} ")
+            print("Here is your latte")
+            return True
+        else:
+            print(f"Sorry {total_value} that not enough money")
+            return False
+    elif selected_drink == "expresso":
+        if total_value >= 3.50:
+            if total_value > 2.50:
+                remaining = total_value - 2.50
+                print(f"Here your change {remaining} ")
+            print("Here is your latte")
+            return True
+        else:
+            print(f"Sorry {total_value} that not enough money")
+            return False
+    elif selected_drink == "cappuccino":
+        if total_value >= 3.60:
+            if total_value > 2.50:
+                remaining = total_value - 2.50
+                print(f"Here your change {remaining} ")
+            print("Here is your latte")
+            return True
+        else:
+            print(f"Sorry {total_value} that not enough money")
+            return False
+
+
+transaction = is_transaction_successful(total_value=total_money, selected_drink=user_choice)
+
+
+def resource_deduction(drink):
+    for res in resources:
+        resources[res] = resources[res] - drink[res]
+
 
 
 #TODO:5 Make Coffee
+
+if transaction:
+    profit = profit + price[user_choice]
+    if user_choice == "latte":
+        resource_deduction(latte)
+
+    elif user_choice == "expresso":
+        resource_deduction(expresso)
+    else:
+        resource_deduction(cappuccino)
+
+
+print_report()
+
